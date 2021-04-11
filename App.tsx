@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -17,6 +17,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 
 import {
@@ -26,6 +27,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import Orientation from 'react-native-orientation-locker';
 
 const Section: React.FC<{
   title: string;
@@ -62,6 +65,32 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    Orientation.addDeviceOrientationListener(orientation => {
+      console.info(`device orientation ${orientation}`);
+    });
+
+    Orientation.addOrientationListener(orientation => {
+      console.info(`orientation ${orientation}`);
+    });
+
+    return () => {
+      Orientation.removeAllListeners();
+    };
+  }, []);
+
+  const handleClickLockLandscape = useCallback(() => {
+    Orientation.lockToLandscape();
+  }, []);
+
+  const handleClickLockPortrait = useCallback(() => {
+    Orientation.lockToPortrait();
+  }, []);
+
+  const handleClickUnlock = useCallback(() => {
+    Orientation.unlockAllOrientations();
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -73,6 +102,11 @@ const App = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+
+          <Button title="Lock landscape" onPress={handleClickLockLandscape} />
+          <Button title="Lock Portrait" onPress={handleClickLockPortrait} />
+          <Button title="Unlock" onPress={handleClickUnlock} />
+
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
