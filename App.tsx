@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,6 +26,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Axios from 'axios';
 
 const Section: React.FC<{
   title: string;
@@ -62,6 +63,21 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [response, setResponse] = useState<undefined | string | null>(
+    undefined,
+  );
+
+  useEffect(() => {
+    Axios.get('https://openlibrary.org/isbn/9780140328721.json').then(
+      response => {
+        setResponse(JSON.stringify(response.data));
+      },
+      () => {
+        setResponse(null);
+      },
+    );
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -74,8 +90,9 @@ const App = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
+            {response === undefined && 'undefined'}
+            {response === null && 'null'}
+            {response != null && response}
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
