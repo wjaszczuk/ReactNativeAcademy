@@ -12,8 +12,12 @@
     "pod:install": "npx pod-install"
   },
   "dependencies": {
+    "@react-native-picker/picker": "^1.15.0",
     "react": "17.0.1",
-    "react-native": "0.64.0"
+    "react-hook-form": "^7.0.7",
+    "react-native": "0.64.0",
+    "react-native-paper": "^4.7.2",
+    "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
